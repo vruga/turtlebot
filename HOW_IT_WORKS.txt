@@ -1,0 +1,37 @@
+================================================================================
+  TURTLEBOT + SLAM + CAMERA — HOW IT FITS TOGETHER
+================================================================================
+
+1. DO I NEED TO RUN start_full_system.sh?
+
+   Yes, for anything that uses the map or camera:
+   - To SAVE the map:  start_full_system.sh (or DO_SLAM.sh) must be running
+     so that SLAM is publishing /map. Then in another terminal run save_map.sh.
+   - To use the web server (camera + map):  start_full_system.sh must be
+     running, then start_server.sh. Open http://<RPI_IP>:5000
+   - Teleop:  run start_full_system.sh in one terminal, then in another
+     terminal run teleop (run_turtlebot3_teleop.sh or ros2 run turtlebot3_teleop teleop_keyboard).
+
+   So:  one terminal = start_full_system.sh (robot + SLAM + camera).
+        second terminal = teleop, or save_map.sh, or start_server.sh.
+
+--------------------------------------------------------------------------------
+
+2. SAVING THE MAP (no Nav2 needed)
+
+   save_map.sh uses save_map_from_topic.py: subscribes to /map once,
+   then writes ~/maps/<name>.yaml and ~/maps/<name>.pgm.
+   Example:  ./save_map.sh my_room
+
+--------------------------------------------------------------------------------
+
+3. QUICK COMMANDS (run from repo folder: cd ~/turtlebot_slam_camera)
+
+   Start full system:     ./start_full_system.sh
+   Teleop (other term):   ./run_turtlebot3_teleop.sh
+   Save map:              ./save_map.sh my_map
+   Web server:            ./start_server.sh  → http://<RPI_IP>:5000
+   List cameras:          ./check_camera.sh
+   Check /map:            ./check_map_topic.sh
+
+================================================================================
