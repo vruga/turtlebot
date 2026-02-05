@@ -1,0 +1,48 @@
+# Agricultural Disease Detection System - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# ROS2 (installed separately via apt)
+# ros-humble-desktop
+
+# Core dependencies
+numpy>=1.21.0
+opencv-python>=4.5.0
+PyYAML>=6.0
+
+# TensorFlow Lite Runtime (preferred for Raspberry Pi)
+# Use ONE of the following:
+# For Raspberry Pi (ARM):
+tflite-runtime>=2.10.0
+# For development (x86):
+# tensorflow>=2.10.0
+
+# Serial communication for ESP32
+pyserial>=3.5
+
+# Web dashboard
+Flask>=2.0.0
+Werkzeug>=2.0.0
+
+# Anthropic Claude API
+anthropic>=0.18.0
+
+# ROS2 Python packages (usually installed with ROS2)
+# rclpy
+# cv_bridge
+# sensor_msgs
+# std_msgs
+
+# Keyboard input handling
+pynput>=1.7.0
+
+# Image processing utilities
+Pillow>=9.0.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Development (optional)
+# black>=23.0.0
+# flake8>=6.0.0
+# mypy>=1.0.0

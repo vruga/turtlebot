@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Disease Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Plant Disease Detection System</h1>
+        <div class="system-status" id="system-status">
+            <span class="status-item" id="status-camera">
+                <span class="status-dot"></span> Camera
+            </span>
+            <span class="status-item" id="status-model">
+                <span class="status-dot"></span> Model
+            </span>
+            <span class="status-item" id="status-esp32">
+                <span class="status-dot"></span> ESP32
+            </span>
+            <span class="status-item" id="status-llm">
+                <span class="status-dot"></span> LLM
+            </span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Camera Feed Section -->
+        <section class="camera-section">
+            <div class="camera-feed">
+                <img id="camera-stream" src="/video_feed" alt="Camera Feed">
+                <div class="camera-overlay" id="camera-overlay">
+                    <span>No Camera Feed</span>
+                </div>
+            </div>
+            <button class="capture-btn" id="capture-btn" onclick="triggerCapture()">
+                CAPTURE FRAME
+            </button>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Detection History Panel -->
+            <section class="panel history-panel">
+                <h2>Detection History</h2>
+                <div class="history-list" id="history-list">
+                    <div class="history-empty">No detections yet</div>
+                </div>
+            </section>
+
+            <!-- Current Detection Panel -->
+            <section class="panel detection-panel">
+                <h2>Latest Detection</h2>
+                <div class="detection-result" id="detection-result">
+                    <div class="no-detection">
+                        <span class="icon">&#x1F33F;</span>
+                        <p>Press CAPTURE to analyze plant</p>
+                    </div>
+                </div>
+
+                <div class="confidence-meter" id="confidence-meter">
+                    <div class="meter-label">Confidence</div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" id="confidence-fill"></div>
+                    </div>
+                    <div class="meter-value" id="confidence-value">--</div>
+                </div>
+            </section>
+
+            <!-- Recommendations Panel -->
+            <section class="panel recommendation-panel">
+                <h2>Expert Recommendation</h2>
+                <div class="recommendation-content" id="recommendation-content">
+                    <p class="recommendation-placeholder">
+                        Recommendations will appear here after detection
+                    </p>
+                </div>
+                <div class="recommendation-source" id="recommendation-source"></div>
+            </section>
+        </div>
+
+        <!-- Spray Control Section -->
+        <section class="spray-section">
+            <h2>Spray Control</h2>
+
+            <div class="spray-controls">
+                <div class="spray-status" id="spray-status">
+                    <span class="status-label">Status:</span>
+                    <span class="status-value" id="spray-status-text">Ready</span>
+                </div>
+
+                <div class="spray-buttons">
+                    <button class="spray-btn manual" onclick="manualSpray(2000)">
+                        Spray 2s
+                    </button>
+                    <button class="spray-btn manual" onclick="manualSpray(4000)">
+                        Spray 4s
+                    </button>
+                    <button class="spray-btn manual" onclick="manualSpray(6000)">
+                        Spray 6s
+                    </button>
+                </div>
+
+                <button class="emergency-btn" id="emergency-btn" onclick="emergencyStop()">
+                    EMERGENCY STOP
+                </button>
+            </div>
+
+            <!-- Spray Confirmation Modal -->
+            <div class="confirmation-modal" id="confirmation-modal">
+                <div class="modal-content">
+                    <h3>Confirm Spray</h3>
+                    <p id="confirmation-message">Spray for 0ms?</p>
+                    <div class="modal-buttons">
+                        <button class="modal-btn confirm" onclick="confirmSpray(true)">
+                            CONFIRM
+                        </button>
+                        <button class="modal-btn cancel" onclick="confirmSpray(false)">
+                            CANCEL
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spray Log -->
+            <div class="spray-log">
+                <h3>Recent Spray Events</h3>
+                <div class="log-list" id="spray-log">
+                    <div class="log-empty">No spray events</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span id="connection-status">Connecting...</span>
+        <span id="last-update">--</span>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

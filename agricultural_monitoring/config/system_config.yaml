@@ -1,0 +1,146 @@
+# Agricultural Monitoring System Configuration
+# General settings for the complete system
+
+# System Identification
+system:
+  name: "Agricultural Disease Detection System"
+  version: "1.0.0"
+  # Unique identifier for this robot/system
+  robot_id: "turtlebot_agri_01"
+
+# ROS2 Configuration
+ros2:
+  # ROS2 namespace for all nodes
+  namespace: "/agricultural"
+  # QoS settings
+  qos:
+    # Reliability: RELIABLE or BEST_EFFORT
+    reliability: "RELIABLE"
+    # Durability: VOLATILE or TRANSIENT_LOCAL
+    durability: "VOLATILE"
+    # History depth
+    depth: 10
+
+# Topic Names
+topics:
+  # Input topics (existing)
+  camera_raw: "/camera/image_raw"
+  camera_compressed: "/camera/image_compressed"
+  # Output topics (this system creates)
+  capture_event: "/agricultural/capture_event"
+  disease_detection: "/agricultural/disease_detection"
+  spray_status: "/agricultural/spray_status"
+  llm_recommendation: "/agricultural/recommendation"
+  system_status: "/agricultural/system_status"
+
+# Keybind Configuration
+keybinds:
+  # Key for frame capture (must not conflict with teleop)
+  capture_frame: "space"
+  # Emergency stop key
+  emergency_stop: "escape"
+  # Manual spray trigger (requires confirmation)
+  manual_spray: "s"
+
+# Camera Settings
+camera:
+  # Expected frame rate from camera node
+  expected_fps: 30
+  # Frame capture quality (JPEG)
+  capture_quality: 95
+  # Capture buffer size (keep N recent frames)
+  buffer_size: 5
+
+# Process Priority Settings
+priority:
+  # Frame capture node (normal priority)
+  frame_capture: 0
+  # Inference worker (low priority to not interfere with teleop)
+  inference: 15
+  # ESP32 controller (normal priority for safety)
+  esp32_controller: 0
+  # LLM client (slightly low priority)
+  llm_client: 10
+
+# Resource Limits
+resources:
+  # Maximum memory usage in MB
+  max_memory_mb: 3000
+  # Maximum CPU percentage for inference
+  max_cpu_percent: 50
+  # Disk space warning threshold in MB
+  disk_warning_mb: 500
+
+# Dashboard Configuration
+dashboard:
+  # Web server host (0.0.0.0 for all interfaces)
+  host: "0.0.0.0"
+  # Web server port
+  port: 8080
+  # Enable debug mode (disable in production)
+  debug: false
+  # Secret key for session management
+  secret_key_env: "DASHBOARD_SECRET_KEY"
+  # Update interval for SSE in milliseconds
+  sse_interval: 1000
+  # Maximum detection history shown
+  max_history: 10
+
+# Logging Configuration
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+  # Log file directory
+  log_dir: "./logs"
+  # Maximum log file size in MB
+  max_file_size: 50
+  # Number of backup files to keep
+  backup_count: 5
+  # Log format
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Data Storage
+storage:
+  # Base data directory
+  data_dir: "./data"
+  # Captured images directory
+  captures_dir: "./data/captures"
+  # Detection results directory
+  results_dir: "./data/results"
+  # Export format for results: json, csv, both
+  export_format: "both"
+
+# Health Monitoring
+health:
+  # Enable system health monitoring
+  enabled: true
+  # Health check interval in seconds
+  interval: 10
+  # Components to monitor
+  components:
+    - camera
+    - model
+    - esp32
+    - dashboard
+  # Alert on component failure
+  alert_on_failure: true
+
+# Startup Checks
+startup:
+  # Verify camera is publishing
+  check_camera: true
+  # Verify model file exists and loads
+  check_model: true
+  # Verify ESP32 connection
+  check_esp32: true
+  # Timeout for startup checks in seconds
+  timeout: 30
+
+# Shutdown Behavior
+shutdown:
+  # Graceful shutdown timeout in seconds
+  timeout: 10
+  # Stop spray on shutdown
+  stop_spray: true
+  # Save state on shutdown
+  save_state: true

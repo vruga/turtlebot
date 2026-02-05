@@ -1,0 +1,70 @@
+# Plant Disease Detection Model Configuration
+# This file configures the TensorFlow Lite model for disease detection
+
+# Path to the TFLite model file (relative to project root)
+model_path: "./models/plant_disease_model.tflite"
+
+# Input image dimensions expected by the model
+input_size:
+  width: 224
+  height: 224
+  channels: 3
+
+# Minimum confidence threshold for disease detection
+# Detections below this threshold will be logged but not acted upon
+confidence_threshold: 0.80
+
+# Disease classification labels (must match model output order)
+classes:
+  - healthy
+  - early_blight
+  - late_blight
+  - leaf_mold
+  - septoria_leaf_spot
+  - bacterial_spot
+  - target_spot
+  - yellow_leaf_curl_virus
+  - mosaic_virus
+  - powdery_mildew
+
+# Disease severity mapping (used for spray decisions)
+# Maps class names to severity levels: healthy, mild, moderate, severe
+severity_mapping:
+  healthy: "healthy"
+  early_blight: "mild"
+  late_blight: "severe"
+  leaf_mold: "moderate"
+  septoria_leaf_spot: "moderate"
+  bacterial_spot: "moderate"
+  target_spot: "mild"
+  yellow_leaf_curl_virus: "severe"
+  mosaic_virus: "severe"
+  powdery_mildew: "mild"
+
+# Image normalization method
+# "0-1": pixel values normalized to [0, 1]
+# "-1-1": pixel values normalized to [-1, 1]
+# "imagenet": ImageNet mean/std normalization
+normalization: "0-1"
+
+# ImageNet normalization parameters (used if normalization: "imagenet")
+imagenet_mean: [0.485, 0.456, 0.406]
+imagenet_std: [0.229, 0.224, 0.225]
+
+# Inference settings
+inference:
+  # Number of threads for TFLite interpreter
+  num_threads: 4
+  # Use XNNPACK delegate for acceleration (recommended for ARM)
+  use_xnnpack: true
+  # Target inference time in seconds (for monitoring)
+  target_time: 2.0
+
+# Frame capture settings
+capture:
+  # Directory to save captured frames
+  output_dir: "/tmp/agricultural_captures"
+  # Keep captured frames for debugging
+  keep_frames: true
+  # Maximum frames to keep (oldest deleted first)
+  max_frames: 100

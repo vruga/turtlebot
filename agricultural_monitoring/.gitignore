@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Logs and data
+logs/
+cache/
+data/
+*.log
+
+# Model files (user provides)
+models/*.tflite
+models/*.h5
+
+# ESP-IDF build
+esp32/*/build/
+esp32/*/sdkconfig
+esp32/*/sdkconfig.old
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+/tmp/
+*.tmp

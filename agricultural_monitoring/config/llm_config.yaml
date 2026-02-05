@@ -1,0 +1,174 @@
+# Claude LLM Integration Configuration
+# Settings for farmer recommendation generation
+
+# API Configuration
+api:
+  # API key (load from environment variable ANTHROPIC_API_KEY)
+  # Never commit actual API keys to version control
+  api_key_env: "ANTHROPIC_API_KEY"
+  # Model to use for recommendations
+  model: "claude-sonnet-4-20250514"
+  # Request timeout in seconds
+  timeout_seconds: 5
+  # Maximum tokens in response
+  max_tokens: 500
+  # Retry attempts on API failure
+  retry_attempts: 2
+  # Delay between retries in seconds
+  retry_delay: 1.0
+
+# Caching Settings
+cache:
+  # Enable response caching to reduce API costs
+  enabled: true
+  # Cache time-to-live in hours
+  ttl_hours: 24
+  # Maximum cached responses
+  max_entries: 100
+  # Cache file path
+  cache_file: "./cache/llm_responses.json"
+
+# Prompt Configuration
+prompts:
+  # Base system prompt for all requests
+  system_prompt: |
+    You are an agricultural expert assistant helping farmers identify and treat
+    plant diseases. Provide practical, actionable advice in simple language.
+    Keep responses concise and farmer-friendly. Focus on:
+    1. Clear disease identification
+    2. Immediate treatment steps
+    3. Long-term prevention
+    4. When to seek professional help
+
+  # Standard detection prompt template
+  standard_template: |
+    Disease detected: {disease_name}
+    Confidence: {confidence}%
+    Crop type: {crop_type}
+    Recent detections: {history}
+    Weather conditions: {weather}
+
+    Our automated system has already applied a {spray_duration}ms spray treatment.
+
+    Provide concise farmer-friendly advice:
+    1. Confirm disease identification and typical symptoms
+    2. Assess if our spray treatment was appropriate
+    3. Additional treatment recommendations if needed
+    4. Preventive measures for this crop
+    5. Expected recovery timeline
+
+    Keep response under 200 words, use simple language a farmer can understand.
+
+  # First detection of the day - more detailed
+  first_detection_template: |
+    Good morning! First disease detection of the day.
+
+    Disease detected: {disease_name}
+    Confidence: {confidence}%
+    Crop type: {crop_type}
+    Yesterday's summary: {yesterday_summary}
+    Current weather: {weather}
+
+    We applied a {spray_duration}ms spray treatment.
+
+    Please provide a detailed morning briefing:
+    1. Explain this disease and its typical progression
+    2. Why it might have appeared (weather, season, etc.)
+    3. Today's recommended monitoring focus
+    4. Treatment effectiveness expectations
+    5. Warning signs to watch for today
+
+    Keep response under 250 words.
+
+  # Repeated same disease - pattern recognition
+  repeated_disease_template: |
+    PATTERN ALERT: Same disease detected multiple times
+
+    Disease: {disease_name}
+    Detection count today: {count}
+    Locations affected: {locations}
+    Time span: {time_span}
+    Confidence range: {confidence_range}%
+
+    This repeated detection suggests a systemic issue.
+
+    Please analyze:
+    1. Why this disease keeps appearing
+    2. Are we treating symptoms, not root cause?
+    3. Environmental factors to address
+    4. Should we adjust our approach?
+    5. When to consider professional intervention
+
+    Be direct about whether current treatment is working.
+
+  # Multiple different diseases
+  multiple_diseases_template: |
+    WARNING: Multiple different diseases detected recently
+
+    Diseases found: {disease_list}
+    Time period: {time_period}
+
+    Multiple disease types suggest environmental stress.
+
+    Please advise:
+    1. What environmental conditions cause multiple diseases?
+    2. Priority order for treatment
+    3. Are these diseases related?
+    4. Field-wide vs spot treatment recommendation
+    5. Should we pause and assess?
+
+  # High confidence detection (>95%)
+  high_confidence_template: |
+    HIGH CONFIDENCE DETECTION ({confidence}%)
+
+    Disease: {disease_name}
+    Crop type: {crop_type}
+
+    With this confidence level, provide definitive treatment advice:
+    1. Confirm this is almost certainly {disease_name}
+    2. Optimal treatment protocol
+    3. Expected results timeline
+    4. Follow-up actions in 24/48/72 hours
+
+    Be confident and direct in your recommendations.
+
+  # Low confidence detection (80-90%)
+  low_confidence_template: |
+    UNCERTAIN DETECTION - Manual verification recommended
+
+    Possible disease: {disease_name}
+    Confidence: {confidence}% (below typical threshold)
+
+    Because confidence is lower than usual:
+    1. What other diseases look similar?
+    2. Key visual differences to check manually
+    3. Should farmer inspect this plant closely?
+    4. Is precautionary treatment wise?
+    5. What additional information would help?
+
+    Emphasize the need for human verification.
+
+# Fallback Settings
+fallback:
+  # Enable local fallback when API fails
+  enabled: true
+  # Local response database path
+  database_path: "./data/fallback_responses.json"
+  # Default response if all else fails
+  default_response: |
+    Unable to connect to recommendation service. Based on the detection:
+    - Monitor the affected area closely
+    - Our automated spray has been applied
+    - Check again in 24 hours
+    - Contact local agricultural extension if condition worsens
+
+# Context Settings
+context:
+  # Include detection history in prompts
+  include_history: true
+  # Number of recent detections to include
+  history_count: 5
+  # Include weather data if available
+  include_weather: true
+  # Weather data source topic
+  weather_topic: "/weather/current"

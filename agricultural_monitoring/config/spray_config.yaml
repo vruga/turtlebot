@@ -1,0 +1,76 @@
+# ESP32 Spray Controller Configuration
+# Safety-critical settings for agricultural spray system
+
+# Serial Communication
+serial:
+  # ESP32 serial port (usually /dev/ttyUSB0 or /dev/ttyACM0)
+  port: "/dev/ttyUSB0"
+  # Baud rate (must match ESP32 firmware)
+  baud_rate: 115200
+  # Connection timeout in seconds
+  timeout: 5.0
+  # Retry attempts on connection failure
+  retry_attempts: 3
+  # Delay between retries in seconds
+  retry_delay: 2.0
+
+# Spray Duration Settings (in milliseconds)
+spray_durations:
+  mild: 2000       # 2 seconds for mild diseases
+  moderate: 4000   # 4 seconds for moderate diseases
+  severe: 6000     # 6 seconds for severe diseases
+
+# Safety Interlocks
+safety:
+  # Maximum spray duration in milliseconds
+  max_duration: 10000
+  # Minimum cooldown between sprays in seconds
+  cooldown_seconds: 2.0
+  # Require manual confirmation before spraying (dashboard safety)
+  confirmation_required: true
+  # Maximum sprays per hour (prevent overuse)
+  max_sprays_per_hour: 20
+  # Heartbeat interval in seconds (ESP32 must respond)
+  heartbeat_interval: 5.0
+  # Heartbeat timeout before emergency stop
+  heartbeat_timeout: 15.0
+  # Enable startup self-test
+  startup_self_test: true
+
+# Decision Logic
+decision:
+  # Minimum confidence to trigger spray
+  min_confidence: 0.80
+  # Spray on healthy detection (should be false)
+  spray_on_healthy: false
+  # Log all decisions (including no-spray)
+  log_all_decisions: true
+
+# Emergency Stop
+emergency:
+  # Enable emergency stop button on dashboard
+  enabled: true
+  # Command sent to ESP32 on emergency stop
+  stop_command: "STOP"
+  # Require confirmation to resume after emergency stop
+  require_resume_confirm: true
+
+# Logging
+logging:
+  # Log file path (relative to project root)
+  log_file: "./logs/spray_log.csv"
+  # Include GPS coordinates if available
+  include_gps: false
+  # GPS topic (if include_gps is true)
+  gps_topic: "/gps/fix"
+
+# Tank Monitoring (optional sensor integration)
+tank:
+  # Enable tank level monitoring
+  enabled: false
+  # Low level warning threshold (percentage)
+  warning_level: 20
+  # Critical level (stop spraying)
+  critical_level: 5
+  # Tank sensor topic
+  sensor_topic: "/tank/level"
